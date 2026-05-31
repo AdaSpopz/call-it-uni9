@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Call It - Adicionar Usuário</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+</head>
+<body>
+  <header class="cabecalho">
+    <div class="cabecalho-conteudo">
+      <div class="cabecalho-logo">
+        <div class="cabecalho-icone">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+        </div>
+        <div>
+          <span class="cabecalho-titulo">Call It</span>
+          <span class="cabecalho-subtitulo">Sistema de Chamados</span>
+        </div>
+      </div>
+      <div class="cabecalho-usuario">
+        <div class="cabecalho-nome">
+          <div class="cabecalho-nome-texto" data-usuario-nome>{{ usuario.nome }}</div>
+          <div class="cabecalho-nome-tipo" data-usuario-tipo>Administrador</div>
+        </div>
+        <a href="/logout" class="botao-sair">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+          Sair
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navegacao">
+    <div class="navegacao-conteudo">
+      <a class="nav-aba" href="chamados">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+        Chamados Abertos
+      </a>
+      <a class="nav-aba" href="abrir-chamado">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
+        Abrir Chamado
+      </a>
+      {% if usuario.perfil in ["Técnico", "Administrador"] %}
+      <a class="nav-aba" href="encerrados">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+        Encerrados
+      </a>
+      {% endif %}
+
+      {% if usuario.perfil in ["Administrador"] %}
+      <a class="nav-aba ativa" href="administrar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        Admin
+      </a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <main class="principal">
+    <div class="formulario-container">
+      <a class="voltar-link" href="/administrar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        Voltar
+      </a>
+      <div class="detalhes-card">
+        <h1 class="formulario-titulo">{% if modo == 'editar' %}Alterar Usuário{% else %}Adicionar Novo Usuário{% endif %}</h1>
+        <p class="formulario-subtitulo">Cadastre um novo usuário, técnico ou administrador no sistema</p>
+
+        <form action="{% if modo == 'editar' %}/usuarios/{{ usuario_editar.id }}/editar{% else %}/adicionar-usuario{% endif %}" method="POST">
+          <div class="formulario-grupo">
+            <label class="formulario-rotulo" for="campo-nome">Nome Completo *</label>
+            <input id="campo-nome" name="nome" type="text" class="campo-formulario" placeholder="Digite o nome completo" value="{% if modo == 'editar' %}{{ usuario_editar.nome }}{% endif %}" required>
+          </div>
+
+          <div class="formulario-grid">
+            <div class="formulario-grupo">
+              <label class="formulario-rotulo" for="campo-matricula">Matrícula *</label>
+              <input id="campo-matricula" name="matricula" type="text" class="campo-formulario" placeholder="Digite 6 digitos ex: 12345" value="{% if modo == 'editar' %}{{ usuario_editar.matricula }}{% endif %}"required>
+            </div>
+            <div class="formulario-grupo">
+              <label class="formulario-rotulo" for="campo-email">E-mail</label>
+              <input id="campo-email" name="email" type="email" class="campo-formulario" placeholder="email@callit.com" value="{% if modo == 'editar' %}{{ usuario_editar.email }}{% endif %}">
+            </div>
+          </div>
+
+          <div class="formulario-grupo">
+            <label class="formulario-rotulo" for="campo-senha">Senha *</label>
+            <input id="campo-senha" name="senha" type="password" class="campo-formulario" placeholder="Defina a senha de acesso" {% if modo != 'editar' %}required{% endif %} required>
+          </div>
+<div class="formulario-grupo">
+  <label class="formulario-rotulo">Tipo de Acesso *</label>
+
+  <div class="seletor-customizado" id="seletor-tipo-novo">
+
+    <button type="button" class="campo-formulario seletor-botao" data-toggle-menu="menu-tipo-novo">
+      <span class="seletor-valor-atual" data-valor-atual>
+        {% if modo == 'editar' %}
+          {{ usuario_editar.perfil }}
+        {% else %}
+          Selecione
+        {% endif %}
+      </span>
+
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </button>
+
+    
+    <div id="menu-tipo-novo" class="seletor-menu">
+      {% for p in perfis %}
+        <button type="button"
+                class="seletor-opcao {% if modo == 'editar' and usuario_editar.perfil_id == p.id %}selecionada{% endif %}"
+                data-valor="{{ p.id }}"
+                data-rotulo="{{ p.nome }}"
+                data-alvo="campo-tipo">
+          {{ p.nome }}
+        </button>
+      {% endfor %}
+    </div>
+
+    
+    <input id="campo-tipo"
+       type="hidden"
+       name="perfil_id"
+       value="{% if modo == 'editar' %}{{ usuario_editar.perfil_id }}{% endif %}">
+       
+  </div>
+</div>
+          <div class="formulario-acoes">
+            <a href="administrar" class="botao-secundario">Cancelar</a>
+            <button type="submit" class="botao-primario">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
+              {% if modo == 'editar' %}Salvar Alterações{% else %}Adicionar Usuário{% endif %}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    
+    const seletores = document.querySelectorAll(".seletor-customizado");
+
+    seletores.forEach(seletor => {
+      const botao = seletor.querySelector(".seletor-botao");
+      const menu = seletor.querySelector(".seletor-menu");
+      const opcoes = menu.querySelectorAll(".seletor-opcao");
+      const inputHidden = seletor.querySelector("input[type=hidden]");
+      const spanValorAtual = botao.querySelector(".seletor-valor-atual");
+
+      botao.addEventListener("click", function (e) {
+        e.stopPropagation();
+        menu.classList.toggle("ativo");
+      });
+
+      opcoes.forEach(opcao => {
+        opcao.addEventListener("click", function () {
+          const valor = this.dataset.valor;
+          const rotulo = this.dataset.rotulo;
+
+          inputHidden.value = valor;
+          spanValorAtual.textContent = rotulo;
+
+          menu.classList.remove("ativo");
+
+          opcoes.forEach(o => o.classList.remove("selecionada"));
+          this.classList.add("selecionada");
+        });
+      });
+
+      document.addEventListener("click", function () {
+        menu.classList.remove("ativo");
+      });
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+1° - instale o python na sua maquina
+
+2° - instale o pacote flask
+   no seu terminal digite: pip install flask
+
+3° - instale a biblioteca do mysql:
+   no seu terminal digite: pip install mysql-connector-python
+   importe o banco de dados no seu xampp e teste a conexão no terminal seguindo esses passos:
+     1° - cd models
+     2° - cd sql_banco
+     3° - python testando_banco.py
+
+4° - para rodar o sistema utilize:
+     python iniciar_sistema.py
+   

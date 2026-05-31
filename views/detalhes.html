@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Call It - Detalhes do Chamado</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+</head>
+<body>
+  <header class="cabecalho">
+    <div class="cabecalho-conteudo">
+      <div class="cabecalho-logo">
+        <div class="cabecalho-icone">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+        </div>
+        <div>
+          <span class="cabecalho-titulo">Call It</span>
+          <span class="cabecalho-subtitulo">Sistema de Chamados</span>
+        </div>
+      </div>
+      <div class="cabecalho-usuario">
+        <div class="cabecalho-nome">
+          <div class="cabecalho-nome-texto">
+            {{ usuario.nome }}
+        </div>
+          <div class="cabecalho-nome-tipo" data-usuario-tipo>{{ usuario.perfil }}</div>
+        </div>
+        <a href="/logout" class="botao-sair">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+          Sair
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navegacao">
+    <div class="navegacao-conteudo">
+      <a class="nav-aba ativa" href="/chamados">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+        Chamados Abertos
+      </a>
+      {% if usuario.perfil_id in [1, 2] %}
+      <a class="nav-aba" href="/abrir-chamado">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
+        Abrir Chamado
+      </a>
+      {% endif %}
+      {% if usuario.perfil in ["Técnico", "Administrador"] %}
+      <a class="nav-aba" href="/encerrados">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+        Encerrados
+      </a>
+      {% endif %}
+
+      {% if usuario.perfil in ["Administrador"] %}
+      <a class="nav-aba" href="/administrar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        Admin
+      </a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <main class="principal">
+    <a class="voltar-link" href="/chamados">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+      Voltar
+    </a>
+
+    <div class="detalhes-layout">
+      <div class="detalhes-principal">
+        <div class="detalhes-card">
+          <h1 class="detalhes-titulo">{{ chamado.titulo }}</h1>
+          <div class="detalhes-badges">
+
+            <span class="
+              badge-prioridade
+              {% if chamado.prioridade == 'Alta' %}
+              badge-prioridade-alta
+              {% elif chamado.prioridade == 'Média' %}
+              badge-prioridade-media
+              {% else %}
+              badge-prioridade-baixa
+              {% endif %}
+              ">
+              {% if chamado.prioridade == 'Alta' %}
+                ALTA - 1H
+              {% elif chamado.prioridade == 'Média' %}
+                MÉDIA - 6H
+              {% else %}
+                BAIXA - 24H
+              {% endif %}
+            </span>
+            <span class="badge-status
+              {% if chamado.status == 'Aberto' %}
+                badge-status-aberto
+              {% elif chamado.status == 'Em andamento' %}
+                badge-status-andamento
+              {% else %}
+                badge-status-encerrado
+              {% endif %}
+            ">
+              {{ chamado.status }}
+            </span>
+            <span class="{% if chamado.atrasado %}badge-sla-atraso{% else %}badge-sla-prazo{% endif %}">
+              {% if chamado.atrasado %}
+                ATRASADO
+              {% else %}
+                NO PRAZO
+              {% endif %}
+            </span>
+          </div>
+          <p class="detalhes-descricao">{{ chamado.descricao }}</p>
+          <hr class="detalhes-separador">
+          <div class="detalhes-grid">
+            <div class="detalhes-grid-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span><strong>Solicitante:</strong> {{ chamado.solicitante }}</span>
+            </div>
+            <div class="detalhes-grid-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+              <span>
+                <strong>Aberto em:</strong>
+                {{ chamado.data_abertura.strftime('%d/%m/%Y às %H:%M') }}
+              </span>
+            </div>
+            <div><strong>Motivo:</strong> {{ chamado.motivo }}</div>
+            <div class="detalhes-grid-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <strong>SLA até:</strong>
+                {{ chamado.sla_final.strftime('%d/%m/%Y às %H:%M') }}
+            </div>
+            <div class="detalhes-grid-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span>
+                <strong>Técnico:</strong>
+
+                {% if chamado.tecnico %}
+                  {{ chamado.tecnico }}
+                {% else %}
+                  Não atribuído
+                {% endif %}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detalhes-card">
+          <h2 style="font-size:1.125rem;font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:16px">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+            Comentários 
+          </h2>
+          {% for comentario in chamado.comentarios %}
+          <div class="comentario-item">
+            <div class="comentario-cabecalho">
+              <span class="comentario-autor">{{ comentario.autor }}</span>
+              <span class="comentario-data">{{ comentario.data.strftime('%d-%m-%Y %H:%M') }}</span>
+            </div>
+            <p class="comentario-texto">{{ comentario.texto }}</p>
+          </div>
+          {% endfor %}
+
+          <form action="/chamados/{{ chamado.id }}/comentarios" method="POST">
+            <textarea id="novo-comentario" name="conteudo" class="campo-formulario" placeholder="Adicionar comentário..." style="min-height:80px;resize:none" required></textarea>
+            <button type="submit" class="botao-primario" style="margin-top:12px">Adicionar Comentário</button>
+          </form>
+        </div>
+      </div>
+
+      
+      {% if usuario.perfil in ["Técnico", "Administrador"] and chamado.status != 'Encerrados' %}
+      <div class="detalhes-lateral">
+        <div class="detalhes-card">
+          <h3 class="acoes-titulo">Ações</h3>
+
+          
+          {% if not chamado.tecnico %}
+          <form action="/chamados/{{ chamado.id }}/atribuir" method="POST">
+              <button type="submit" class="btn-acao">
+                  Atribuir para Mim
+              </button>
+          </form>
+          {% endif %}
+          
+          {% if chamado.status != 'Encerrados' %}
+
+        <form action="/chamados/{{ chamado.id }}/encerrar" method="POST">
+
+            <button type="submit" class="btn-acao">
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <path d="m9 11 3 3L22 4"/>
+
+                </svg>
+
+                Encerrar Chamado
+
+            </button>
+
+        </form>
+
+        {% endif %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </main>
+
+  <script src="js/interacoes.js"></script>
+</body>
+</html>
