@@ -1,4 +1,3 @@
-# imports
 import os
 from functools import wraps
 
@@ -24,7 +23,7 @@ from datetime import datetime, timedelta
 from flask import flash, redirect
 
 
-# base do projeto
+
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 app = Flask(
@@ -35,6 +34,8 @@ app = Flask(
 )
 
 app.secret_key = "amouni9"
+
+
 
 @app.after_request
 def add_header(response):
@@ -50,6 +51,8 @@ def login_required(f):
             return redirect("/")
         return f(*args, **kwargs)
     return decorated_function
+
+
 
 @app.route("/")
 def index():
@@ -75,11 +78,11 @@ def fazer_login():
     return render_template("login.html", erro="Usuário ou senha inválidos")
 
 
+
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect("/")
-
 
 @app.route("/chamados")
 @login_required
@@ -107,6 +110,7 @@ def chamados():
         status = (chamado["status"] or "").strip().lower()
         prioridade = (chamado["prioridade"] or "").strip().lower()
 
+
         if prioridade == "alta":
             sla_total = timedelta(hours=1)
         elif prioridade == "média":
@@ -116,6 +120,7 @@ def chamados():
 
         prazo_final = chamado["data_abertura"] + sla_total
         agora = datetime.now()
+
 
         if status in ["encerrado", "encerrados"]:
 
@@ -131,6 +136,8 @@ def chamados():
                 chamado["sla_restante"] = "Atendido Fora do Prazo"
 
             continue
+
+
 
         restante = prazo_final - agora
 
@@ -151,6 +158,7 @@ def chamados():
         usuario_tipo=usuario["perfil_id"],
         total_chamados=total_chamados
     )
+
 
 
 
@@ -202,16 +210,17 @@ def detalhes(id):
 
     chamado = buscar_chamado_por_id(id)
 
-    # comentários
+
     chamado["comentarios"] = buscar_comentarios(id)
     chamado["qtd_comentarios"] = len(chamado["comentarios"])
+
 
     status = (chamado["status"] or "").strip().lower()
     prioridade = (chamado["prioridade"] or "").strip().lower()
 
-    # remove acento (média → media)
     prioridade = prioridade.replace("média", "media")
 
+    
     if prioridade == "alta":
         sla_total = timedelta(hours=1)
     elif prioridade == "media":
@@ -223,6 +232,7 @@ def detalhes(id):
     agora = datetime.now()
 
     chamado["sla_final"] = sla_final
+
 
     if status in ["encerrado", "encerrados"]:
 
@@ -239,6 +249,8 @@ def detalhes(id):
             else:
                 chamado["sla_restante"] = "SLA: Atendido Fora do Prazo"
                 chamado["atrasado"] = True
+
+
     else:
 
         chamado["atrasado"] = agora > sla_final
@@ -284,7 +296,6 @@ def encerrados():
     filtrados = []
 
     for c in chamados:
-        # resto do seu código continua igual
 
         prioridade = (c.get("prioridade") or "").strip().lower()
         prioridade = prioridade.replace("média", "media")
@@ -318,7 +329,7 @@ def encerrados():
 
         filtrados.append(c)
 
-    # Mapear filtro para texto legível
+    
     filtro_sla_label = {
         "todos": "Todos",
         "no_prazo": "No Prazo",
@@ -333,7 +344,7 @@ def encerrados():
         no_prazo=no_prazo,
         em_atraso=em_atraso,
         filtro_sla=filtro_sla,
-        filtro_sla_label=filtro_sla_label
+        filtro_sla_label=filtro_sla_label  
     )
 @app.route("/administrar")
 @login_required
@@ -347,6 +358,8 @@ def administrar():
         1 for u in usuarios
         if u["perfil"] == 'Técnico'
     )
+
+
     chamados = listar_chamados(
         prioridade=None,
         status=None
@@ -359,10 +372,11 @@ def administrar():
         if c["status"].strip().lower() in status_filtrado
     )
 
-
     chamados_encerrados = listar_chamados_encerrados()
 
+
     total_chamados = len(chamados) + len(chamados_encerrados)
+
 
     if usuario["perfil"] == 'Administrador':
 
@@ -401,6 +415,8 @@ def gerencia_chamados():
         1 for u in usuarios
         if u["perfil"] == 'Técnico'
     )
+
+
     chamados = listar_chamados(
         prioridade=None,
         status=None
@@ -413,11 +429,14 @@ def gerencia_chamados():
         if c["status"].strip().lower() in status_filtrado
     )
 
+
     chamados_encerrados = listar_chamados_encerrados()
 
     total_chamados = len(chamados) + len(chamados_encerrados)
 
+
     todos_chamados = chamados + chamados_encerrados
+
 
     total_alta = sum(
         1 for c in todos_chamados
@@ -450,7 +469,7 @@ def gerencia_chamados():
 
     else:
         return redirect("/chamados")
-    
+
 @app.route("/chamados/<int:id>/atribuir", methods=["POST"])
 @login_required
 def atribuir_chamado(id):
@@ -464,6 +483,8 @@ def atribuir_chamado(id):
     )
 
     return redirect(f"/detalhes/{id}")
+
+
 
 @app.route("/chamados/<int:id>/status", methods=["POST"])
 @login_required
@@ -485,6 +506,7 @@ def alterar_status(id):
     )
 
     return redirect(f"/detalhes/{id}")
+
 
 
 @app.route("/chamados/<int:id>/encerrar", methods=["POST"])
@@ -511,14 +533,15 @@ def adicionar_comentario(id):
 def adicionar_usuario():
     usuario_logado = session.get("usuario")
 
-    # somente administrador
+    
     if usuario_logado["perfil_id"] != 2:
         return redirect("/chamados")
 
     perfis = listar_perfil()
 
+    
     if request.method == "GET":
-        usuario_id = request.args.get("id")  # se existir, modo editar
+        usuario_id = request.args.get("id")  
         usuario_editar = None
         modo = "novo"
 
@@ -538,7 +561,9 @@ def adicionar_usuario():
             usuario_editar=usuario_editar
         )
 
-    usuario_id = request.form.get("usuario_id")  # hidden input opcional no HTML para edição
+    
+    
+    usuario_id = request.form.get("usuario_id")  
     nome = request.form.get("nome")
     matricula = request.form.get("matricula")
     email = request.form.get("email")
@@ -546,22 +571,23 @@ def adicionar_usuario():
     perfil_id = request.form.get("perfil_id")
    
 
+    
     if not nome or not matricula or not perfil_id or (not senha and not usuario_id):
         flash("Preencha todos os campos obrigatórios!", "erro")
         return redirect(request.url)
 
-    # valida matrícula duplicada
+    
     usuario_existente = buscar_usuario_por_matricula(matricula)
     if usuario_existente:
-        # se for edição, ignora se o ID é o mesmo
+        
         if not usuario_id or int(usuario_id) != usuario_existente["id"]:
             flash("Já existe um usuário com essa matrícula!", "erro")
             return redirect(request.url)
 
-    if usuario_id:  # modo editar
+    if usuario_id:  
         atualizar_usuario(usuario_id, nome, matricula, email, senha, perfil_id)
         flash("Usuário atualizado com sucesso!", "sucesso")
-    else:  # modo novo
+    else:  
         criar_usuario(nome, matricula, email, senha, perfil_id)
         flash("Usuário criado com sucesso!", "sucesso")
 
@@ -592,12 +618,12 @@ def atualizar_usuario_route(id):
 
     atualizar_usuario(id, nome, matricula, email, senha, perfil_id)
 
-    # atualiza dados da sessão
+    
     if session["usuario"]["id"] == id:
 
         session["usuario"]["nome"] = nome
 
-        # atualiza perfil também
+        
         if perfil_id == "1":
             session["usuario"]["perfil"] = "Usuário"
         elif perfil_id == "2":
